@@ -25,7 +25,9 @@ mongoose
   )
   .catch((err) => console.log(err));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
-
+app.get('/',(req,res)=>
+  res.send('Hello World')
+)
 //middleware
 app.use(express.json());
 app.use(helmet());
