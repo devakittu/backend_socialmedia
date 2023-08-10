@@ -12,22 +12,11 @@ const router = express.Router();
 const path = require("path");
 const cors = require("cors");
 dotenv.config();
+const PORT = process.env.PORT;
+const CONNECTION_URL = process.env.MONGO_URL;
 
-mongoose
-  .connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() =>
-    app.listen(process.env.PORT, () => {
-      console.log(`Backend server is running!${process.env.PORT}`);
-    })
-  )
-  .catch((err) => console.log(err));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
-app.get('/',(req,res)=>
-  res.send('Hello World')
-)
+app.get("/", (req, res) => res.send("Hello World"));
 //middleware
 app.use(express.json());
 app.use(helmet());
@@ -54,3 +43,14 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
+mongoose
+  .connect(CONNECTION_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() =>
+    app.listen(PORT, () => {
+      console.log(`Backend server is running!${PORT}`);
+    })
+  )
+  .catch((err) => console.log(err));
